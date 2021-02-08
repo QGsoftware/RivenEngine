@@ -1,0 +1,154 @@
+<!--Force Engine v2.0 by SuperQGS & qgsoftware.net-->
+
+<!DOCTYPE html>
+
+<!--HTML (this is a very useful comment)-->
+<html>
+    <!--CSS-->
+    <style>
+        html, body {
+            margin:0px;
+            height: 100%;
+        }
+        #f2canvas {
+            height: 99.5%;
+            
+        }
+    </style>
+    
+    <!--BODY-->
+    <body>
+        <!--GAME CANVAS-->
+        <canvas id='f2canvas'></canvas>
+    </body>
+    
+    
+    
+    <!--LINK SCRIPTS-->
+    <script>
+        //apply canvas config
+        var canvas = document.getElementById("f2canvas"); //get canvas element
+        document.getElementById("f2canvas").width = 1920; //set horizontal resolution
+        document.getElementById("f2canvas").height = 1017; //set vertical resolution
+        var ctx = canvas.getContext("2d"); //get canvas context
+        
+        
+        
+        //im so dumb i got east and west mixed up it was late okay
+        
+        //NODES / GAME DATA
+        var nodes = [
+            [//NODE 0
+            /*0*/{img:"0n",links:[{l1:0,l2:2,x1:0,y1:0,x2:480,y2:1017},{l1:1,l2:0,x1:480,y1:0,x2:1440,y2:1017},{l1:0,l2:3,x1:1440,y1:0,x2:1920,y2:1017}]},
+            /*1*/{img:"0s",links:[{l1:0,l2:3,x1:0,y1:0,x2:480,y2:1017},{l1:2,l2:1,x1:480,y1:0,x2:1440,y2:1017},{l1:0,l2:2,x1:1440,y1:0,x2:1920,y2:1017}]},
+            /*2*/{img:"0e",links:[{l1:0,l2:1,x1:0,y1:0,x2:480,y2:1017},{l1:5,l2:3,x1:480,y1:0,x2:1440,y2:1017},{l1:0,l2:0,x1:1440,y1:0,x2:1920,y2:1017}]},
+            /*3*/{img:"0w",links:[{l1:0,l2:0,x1:0,y1:0,x2:480,y2:1017},{l1:4,l2:0,x1:480,y1:0,x2:1440,y2:1017},{l1:0,l2:1,x1:1440,y1:0,x2:1920,y2:1017}]}
+            ],
+            [//NODE 1
+                {img:"1n",links:[{l1:1,l2:1,x1:0,y1:0,x2:480,y2:1017},{l1:1,l2:1,x1:0,y1:900,x2:1920,y2:1017},{l1:1,l2:1,x1:1440,y1:0,x2:1920,y2:1017}]},
+                {img:"1s",links:[{l1:1,l2:0,x1:0,y1:0,x2:480,y2:1017},{l1:0,l2:1,x1:480,y1:0,x2:1440,y2:1017},{l1:1,l2:0,x1:1440,y1:0,x2:1920,y2:1017}]}
+            ],
+            [//NODE 2
+                {img:"2n",links:[{l1:2,l2:1,x1:0,y1:0,x2:480,y2:1017},{l1:0,l2:0,x1:480,y1:0,x2:1440,y2:1017},{l1:2,l2:1,x1:1440,y1:0,x2:1920,y2:1017}]},
+                {img:"2s",links:[{l1:2,l2:0,x1:0,y1:0,x2:480,y2:1017},{l1:3,l2:0,x1:480,y1:700,x2:1440,y2:1017},{l1:2,l2:0,x1:1440,y1:0,x2:1920,y2:1017}]}
+            ],
+            [//NODE 3
+                {img:"3s",links:[{l1:2,l2:1,x1:0,y1:0,x2:1920,y2:300}]}
+            ],
+            [//NODE 4
+                {img:"4e",links:[{l1:4,l2:1,x1:0,y1:0,x2:480,y2:1017},{l1:0,l2:3,x1:480,y1:900,x2:1440,y2:1017},{l1:4,l2:1,x1:1440,y1:0,x2:1920,y2:1017}]},
+                {img:"4w",links:[{l1:4,l2:0,x1:0,y1:0,x2:480,y2:1017},{l1:0,l2:2,x1:480,y1:0,x2:1440,y2:1017},{l1:4,l2:0,x1:1440,y1:0,x2:1920,y2:1017}]}
+            ],
+            [//NODE 5
+            /*0*/{img:"5n",links:[{l1:5,l2:3,x1:0,y1:0,x2:480,y2:1017},{l1:5,l2:2,x1:1440,y1:0,x2:1920,y2:1017}]},
+            /*1*/{img:"5s",links:[{l1:5,l2:2,x1:0,y1:0,x2:480,y2:1017},{l1:5,l2:3,x1:1440,y1:0,x2:1920,y2:1017}]},
+            /*2*/{img:"5e",links:[{l1:5,l2:0,x1:0,y1:0,x2:480,y2:1017},{l1:0,l2:3,x1:480,y1:0,x2:1440,y2:1017},{l1:5,l2:1,x1:1440,y1:0,x2:1920,y2:1017}]},
+            /*3*/{img:"5w",links:[{l1:5,l2:1,x1:0,y1:0,x2:480,y2:1017},{l1:6,l2:0,x1:480,y1:0,x2:1440,y2:1017},{l1:5,l2:0,x1:1440,y1:0,x2:1920,y2:1017}]}
+            ],
+            [//NODE 6
+                {img:"6",links:[{l1:8,l2:0,x1:0,y1:750,x2:680,y2:1017},{l1:7,l2:0,x1:1240,y1:750,x2:1920,y2:1017},{l1:5,l2:3,x1:0,y1:0,x2:1920,y2:1017}]}
+            ],
+            [//NODE 7
+                {img:"7",links:[{l1:6,l2:0,x1:0,y1:0,x2:1920,y2:1017}]}
+            ],
+            [//NODE 8
+                {img:"8",links:[{l1:6,l2:0,x1:0,y1:0,x2:1920,y2:1017}]}
+            ],
+            
+        ];
+        
+        
+        
+        //current position
+        var current_node = 0;
+        var current_sub = 0;
+        var gamemode = 0;
+        
+        //render subnode
+        function render(i,j) {
+            ctx.drawImage(nodes[i][j].img2,0,0);
+        }
+        
+        //compile all image files
+        compile_images();
+        function compile_images() {
+            for (i = 0; i < nodes.length; i++) {
+                for (j = 0; j < nodes[i].length; j++) {
+                    nodes[i][j].img2 = new Image();
+                    nodes[i][j].img2.src = "images/" + nodes[i][j].img + ".png";
+                }
+            }
+            
+            nodes[8][0].img2.onload = function(){
+                render(0,0);
+            };
+        }
+        
+        //find collisions with boxes
+        function click_collision(x,y) {
+            for (i = 0; i < nodes[current_node][current_sub].links.length; i++) {
+                
+                var box = nodes[current_node][current_sub].links[i];
+                
+                if (x > box.x1 && x < box.x2 && y > box.y1 && y < box.y2) {
+                    current_node = box.l1;
+                    current_sub = box.l2;
+                    render(current_node,current_sub);
+                    return;
+                }
+            }
+        }
+        
+        
+        //render boxes
+        function render_boxes() {
+            for (i = 0; i < nodes[current_node][current_sub].links.length; i++) {
+                
+                var box = nodes[current_node][current_sub].links[i];
+                
+                ctx.strokeStyle = "red";
+                ctx.beginPath();
+                ctx.rect(box.x1, box.y1, box.x2, box.y2);
+                ctx.stroke();
+            }
+        }
+        
+        
+        
+        //detect click coordinates
+        canvas.addEventListener("click", function (evt) {
+            var rect = canvas.getBoundingClientRect();
+            var clickx = (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width;
+            var clicky = (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height;
+            if (gamemode == 0) {
+                click_collision(clickx,clicky);
+            }
+            if (gamemode == 1) {
+                
+            }
+            
+        }, false);
+        
+    </script>
+    
+</html>
